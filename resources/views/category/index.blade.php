@@ -11,17 +11,32 @@
                     <div class="card-header">
                         <small class="text-body-secondary">Created at: {{ $category['created_at'] }}</small>
                     </div>
-                    <img src="{{ asset('images/' . $category['image']) }}" class="" height="220" alt="...">
+                    <img src="{{ asset('images/uploads/' . $category['image']) }}" class="" height="220"
+                        alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ $category['name'] }}</h5>
                         <p class="card-text">{{ $category['category'] }}</p>
                         <a href="{{ route('category.show', $category) }}" class="btn btn-primary">show</a>
-                        <a href="{{ route('category.edit', $category) }}" class="btn btn-warning">edit</a>
-                        <form method="post" action="{{ route('category.destroy', $category->id) }}" class="d-inline">
-                            @method('delete')
-                            @csrf()
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
+                        @can('is_admin')
+                            <a href="{{ route('category.edit', $category) }}" class="btn btn-warning">edit</a>
+                        @elsecan('is_author')
+                            <a href="{{ route('category.edit', $category) }}" class="btn btn-warning">edit</a>
+                        @elsecan('is_editor')
+                            <a href="{{ route('category.edit', $category) }}" class="btn btn-warning">edit</a>
+                        @endcan
+                        @can('is_admin')
+                            <form method="post" action="{{ route('category.destroy', $category->id) }}" class="d-inline">
+                                @method('delete')
+                                @csrf()
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        @elsecan('is_author')
+                            <form method="post" action="{{ route('category.destroy', $category->id) }}" class="d-inline">
+                                @method('delete')
+                                @csrf()
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        @endcan
                         <!-- Button trigger modal -->
                         {{-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             delete

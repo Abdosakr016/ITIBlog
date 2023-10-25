@@ -6,6 +6,7 @@ use App\Models\categories;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCategoryController;
 use App\Http\Requests\UpdateCategoryController;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -20,12 +21,14 @@ class CategoryController extends Controller
     }
     public function store(StoreCategoryController $request)
     {
-        // request()->validate([
-        //     "name" => "required|min:3",
-        //     "category" => "required",
-        //     "image" => "required"
-        // ]);
-        categories::create($request->all());
+        $data = $request->all();
+        if ($request->hasFile("image")) {
+            $categoryImage = $request["image"];
+            $path = $categoryImage->store("uploadedImage", 'categories_images');
+            $data["image"] = $path;
+        }
+
+        categories::create($data);
         return to_route("category.index");
     }
     public function show(categories $category)
@@ -34,16 +37,27 @@ class CategoryController extends Controller
     }
     public function edit(categories $category)
     {
+
         return view("category.edit", ["data" => $category]);
     }
     public function update(UpdateCategoryController $request, categories $category)
     {
-        $category->update($request->all());
-        return to_route("category.index");
+        $allowUser = Gate::inspect("update", $category);
+        if ($allowUser->allowed()) {
+            $category->update($request->all());
+            return to_route("category.index");
+        };
+        return abort(403);
     }
     public function destroy(categories $category)
     {
-        $category->delete();
-        return to_route("category.index");
+        if (Gate::allows('is_admin')) {
+            if ($category->image) {
+                unlink("images/uploads/{$category->image}");
+            }
+            $category->delete();
+            return to_route("category.index");
+        }
+        return abort(403);
     }
 }

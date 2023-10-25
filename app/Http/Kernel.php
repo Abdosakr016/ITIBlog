@@ -38,6 +38,10 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
+        "admin" => [\App\Http\Middleware\CheckAdmin::class],
+
+        "CheckPost" => [\App\Http\Middleware\CheckPost::class],
+
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',

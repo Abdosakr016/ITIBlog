@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use File;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Categories>
@@ -20,7 +21,7 @@ class CategoriesFactory extends Factory
         return [
             'name' => fake()->name(),
             'category' => Str::random(10),
-            'image' => 'R.jpg',
+            'image' => 'uploadedImage/html.png',
 
         ];
     }

@@ -11,7 +11,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('category.store') }}" enctype="multipart/image" method="post">
+    <form action="{{ route('category.store') }}" enctype="multipart/form-data" method="post">
         @csrf()
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Post Title</label>
@@ -34,7 +34,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Post image</label>
+            <label for="exampleInputPassword1" for="image" class="form-label">Post image</label>
             <label for="image" class="form-label"></label>
             <input class="form-control" name="image" value="{{ old('image') }}" type="file" id="image">
             @error('image')

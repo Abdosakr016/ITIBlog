@@ -1,7 +1,7 @@
 @extends('navbar')
 @section('post')
     <div class="card mb-3">
-        <img src="{{ asset('images/' . $data['image']) }}" height="450" class="card-img-top" alt="...">
+        <img src="{{ asset('images/uploads/' . $data['image']) }}" height="450" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ $data['name'] }}</h5>
             <p class="card-text">{{ $data['category'] }}</p>
